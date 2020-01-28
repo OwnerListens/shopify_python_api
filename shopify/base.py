@@ -8,6 +8,8 @@ import sys
 from six.moves import urllib
 import six
 
+from shopify.collection import PaginatedCollection
+from pyactiveresource.collection import Collection
 
 # Store the response from the last request in the connection object
 class ShopifyConnection(pyactiveresource.connection.Connection):
@@ -202,3 +204,11 @@ class ShopifyResource(ActiveResource, mixins.Countable):
         cls.password = None
         cls.version = None
         cls.headers.pop('X-Shopify-Access-Token', None)
+
+    @classmethod
+    def find(cls, id_=None, from_=None, **kwargs):
+        """Checks the resulting collection for pagination metadata."""
+        collection = super(ShopifyResource, cls).find(id_=id_, from_=from_, **kwargs)
+        if isinstance(collection, Collection) and "headers" in collection.metadata:
+            return PaginatedCollection(collection, metadata={"resource_class": cls})
+        return collection
