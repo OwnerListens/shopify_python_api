@@ -25,10 +25,10 @@ class ApiVersion(object):
     @classmethod
     def define_known_versions(cls):
         cls.define_version(Unstable())
-        cls.define_version(Release('2019-04'))
         cls.define_version(Release('2019-07'))
         cls.define_version(Release('2019-10'))
         cls.define_version(Release('2020-01'))
+        cls.define_version(Release('2020-04'))
 
     @classmethod
     def clear_defined_versions(cls):
@@ -52,7 +52,7 @@ class ApiVersion(object):
 
 
 class Release(ApiVersion):
-    FORMAT = re.compile('^\d{4}-\d{2}$')
+    FORMAT = re.compile(r'^\d{4}-\d{2}$')
     API_PREFIX = '/admin/api'
 
     def __init__(self, version_number):
